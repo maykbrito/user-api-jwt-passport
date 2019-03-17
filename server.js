@@ -1,10 +1,11 @@
 const express = require('express')
 const app = express()
-require('./db')
+
+require('./config/db')
+require('./config/auth')(app)
 
 app.use(express.json())
-
-app.use('/api/users', require('./api/users'))
+require('./api/routes')(app)
 
 const port = process.env.PORT || 5000
 app.listen(port, () => console.log(`Server is running on port ${port}`))

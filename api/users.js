@@ -3,6 +3,7 @@ const router = express.Router()
 const User = require('../models/User')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const passport = require('passport')
 
 
 router.post('/register', async (req, res) => {
@@ -53,6 +54,23 @@ router.post('/login', async (req, res) => {
     })
 
     res.json(await jwtSign(userFound))
+})
+
+router.get('/current', passport.authenticate('jwt', {
+    session: false
+}), (req, res) => {
+    const {
+        id,
+        name,
+        email,
+        date
+    } = req.user
+    res.json({
+        id,
+        name,
+        email,
+        date
+    })
 })
 
 const generateHash = password => {
